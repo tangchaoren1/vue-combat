@@ -2,7 +2,63 @@
 const vm = new Vue({
     el:'#root',
     data:{
-        activeKey:'1'     
+       theadData:[
+          {
+              title:'姓名',
+              key:'name'
+          },
+          {
+            title:'年龄',
+            key:'age',
+            isSort:true
+        },
+        {
+            title:'出生日期',
+            key:'birthday'
+        },
+        {
+            title:'地址',
+            key:'address'
+        }
+       ],
+       discription:[
+           {
+              name:'汤团',
+              age:25,
+              birthday:'1992/10/6',
+              address:'刘家沟' 
+           },
+           {
+            name:'汤团',
+            age:25,
+            birthday:'1992/10/6',
+            address:'刘家沟' 
+         },
+         {
+            name:'汤团',
+            age:25,
+            birthday:'1992/10/6',
+            address:'刘家沟' 
+         },
+         {
+            name:'汤团',
+            age:25,
+            birthday:'1992/10/6',
+            address:'刘家沟' 
+         },
+         {
+            name:'汤团',
+            age:25,
+            birthday:'1992/10/6',
+            address:'刘家沟' 
+         },
+         {
+            name:'汤团',
+            age:25,
+            birthday:'1992/10/6',
+            address:'刘家沟' 
+         }
+       ]   
     }
 })
 
