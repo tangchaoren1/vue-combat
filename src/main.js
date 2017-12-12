@@ -1,4 +1,3 @@
-// import Time from './time.js';
 const vm = new Vue({
     el:'#root',
     data:{
