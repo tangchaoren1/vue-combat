@@ -1,6 +1,7 @@
 Vue.component('v-table', {
     props: {
         theadData: {
+            //默认的数组
             type: Array,
             default: function () {
                 return [];
