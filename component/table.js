@@ -1,4 +1,4 @@
-Vue.component('vTable', {
+Vue.component('v-table', {
     props: {
         theadData: {
             type: Array,
@@ -6,13 +6,13 @@ Vue.component('vTable', {
                 return [];
             }
         },
-        discription: {
+        messageData: {
             type: Array,
             default: function () {
                 return [];
             }
         }
-    },
+    }, 
     data: function () {
         return {
             currentTheadData: [],
@@ -75,7 +75,7 @@ Vue.component('vTable', {
             })
         },
         makeDiscription: function () {
-            this.discription = this.currentDiscription.map((row, index) => {
+            this.currentDiscription = this.messageData.map((row, index) => {
                 row._index = index;
                 return row;
             })
@@ -100,7 +100,7 @@ Vue.component('vTable', {
             }
         },
         watch:{
-            discription: function(){
+            messageData: function(){
                 this.makeDiscription();
                 var sortedColumn = this.currentDiscription.filter((col) =>{
                     return col._sortType !== 'normal';
