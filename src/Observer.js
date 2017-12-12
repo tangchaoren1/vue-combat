@@ -7,6 +7,7 @@ let data = {
 function Observer() {
     this.data = data;
     this.walk(data);
+    new Watcher();
 }
 let p = Observer.prototype;
 p.walk = function (obj) {
@@ -22,37 +23,61 @@ p.walk = function (obj) {
         }
     }
 }
-
+var target = document.getElementById('observer');
 p.convert = function (key, val) {
     var dep = new Dep();
+    
     Object.defineProperty(this.data, key, {
         enumerable: true,
         configurable: true,
-        get: function () {
-            return val;
+        get: function () {          
+            target.innerHTML = val;
         },
         set: function (newVal) {
             console.log('数值发生了改变!')
-            val = newVal;
-            dep.notify();
+            if (newVal != val) {
+                target.innerHTML = newVal;
+                val = newVal;
+            }          
         }
     })
 }
 
-function Dep () {
+function Dep() {
     this.subs = [];
 }
 
 Dep.prototype = {
-    addSub: function(sub) {
+    addSub: function (sub) {
         this.subs.push(sub)
     },
-    notify: function() {
-         this.subs.forEach(function(sub){
-             sub.update();
-         })
+    depend: function () {
+        Dep.target.addDep(this);
+    },
+    notify: function () {
+        this.subs.forEach(function (sub) {
+            sub.update();
+        })
     }
 }
+
+Dep.target = null;
+
+function Watcher() {
+
+}
+Watcher.prototype = {
+    get: function (key) {
+        Dep.target = this;
+        this.value = data[key];
+        console.log(this.value)
+    },
+    update: function () {
+
+    }
+}
+
+
 
 
 
