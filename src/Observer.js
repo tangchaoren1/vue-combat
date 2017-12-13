@@ -1,5 +1,5 @@
 let data = {
-    name: 'nigulasi',
+    name: 'zhaoyang',
     age: 45,
     height: 175,
     hobby: 'female'
@@ -7,13 +7,11 @@ let data = {
 function Observer() {
     this.data = data;
     this.walk(data);
-    new Watcher();
 }
 let p = Observer.prototype;
 p.walk = function (obj) {
     let val;
     for (let key in obj) {
-
         if (obj.hasOwnProperty(key)) {
             val = obj[key];
             if (typeof val === 'object') {
@@ -30,14 +28,15 @@ p.convert = function (key, val) {
     Object.defineProperty(this.data, key, {
         enumerable: true,
         configurable: true,
-        get: function () {          
-            target.innerHTML = val;
+        get: function () {  
+            console.log('访问了值')        
+           Dep.target && dep.addSub(Dep.target);
+           console.log(Dep.target)   
         },
         set: function (newVal) {
             console.log('数值发生了改变!')
             if (newVal != val) {
-                target.innerHTML = newVal;
-                val = newVal;
+                dep.notify()
             }          
         }
     })
@@ -63,17 +62,16 @@ Dep.prototype = {
 
 Dep.target = null;
 
-function Watcher() {
-
+function Watcher(key) {
+   this.value = this.get(key);
 }
 Watcher.prototype = {
     get: function (key) {
         Dep.target = this;
-        this.value = data[key];
-        console.log(this.value)
+        this.value = key;
     },
     update: function () {
-
+        
     }
 }
 
@@ -82,8 +80,7 @@ function Compile(el) {
   [].slice.call(nodes).forEach((node)=>{
       if(node.nodeType === 1){
         this.compile(node)
-      }
-      
+      }      
   })
 }
 
@@ -91,10 +88,15 @@ Compile.prototype = {
     compile:function(node){
        var nodeAttrs = node.attributes;
        [].slice.call(nodeAttrs).forEach((attr)=>{
-           var eleValue = attr.value;
-           node.textContent = data[eleValue];
+            this.bind(node,attr)
        })
+    },
+    bind: function(node,attr){
+        var eleValue = attr.value;
+        new Watcher(data[eleValue])
+        node.textContent = data[eleValue];
     }
+
 }
 
 
