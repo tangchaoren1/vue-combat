@@ -77,6 +77,28 @@ Watcher.prototype = {
     }
 }
 
+function Compile(el) {
+  var nodes = el.childNodes;
+  [].slice.call(nodes).forEach((node)=>{
+      if(node.nodeType === 1){
+        this.compile(node)
+      }
+      
+  })
+}
+
+Compile.prototype = {
+    compile:function(node){
+       var nodeAttrs = node.attributes;
+       [].slice.call(nodeAttrs).forEach((attr)=>{
+           var eleValue = attr.value;
+           node.textContent = data[eleValue];
+       })
+    }
+}
+
+
+new Compile(target);
 
 
 
