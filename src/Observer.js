@@ -13,8 +13,8 @@ function Observer() {
     this.data = data;
     this.walk(data);
 }
-let p = Observer.prototype;
-p.walk = function (obj) {
+let viewer = Observer.prototype;
+viewer.walk = function (obj) {
     let val;
     for (let key in obj) {
         if (obj.hasOwnProperty(key)) {
@@ -27,7 +27,7 @@ p.walk = function (obj) {
     }
 }
 var target = document.getElementById('observer');
-p.convert = function (key, val) {
+viewer.convert = function (key, val) {
     var dep = new Dep();
     
     Object.defineProperty(data, key, {
