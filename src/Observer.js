@@ -1,5 +1,10 @@
+/* <div id='observer'>
+        <span n-html='name'>123</span>
+        <span n-html='age'>123</span>
+        <span n-html='hobby'>123</span>
+</div> */
 let data = {
-    name: 'zhaoyang',
+    name: 'zhao',
     age: 45,
     height: 175,
     hobby: 'female'
@@ -25,17 +30,16 @@ var target = document.getElementById('observer');
 p.convert = function (key, val) {
     var dep = new Dep();
     
-    Object.defineProperty(this.data, key, {
+    Object.defineProperty(data, key, {
         enumerable: true,
         configurable: true,
         get: function () {  
-            console.log('访问了值')        
            Dep.target && dep.addSub(Dep.target);
-           console.log(Dep.target)   
+           return val; 
         },
         set: function (newVal) {
-            console.log('数值发生了改变!')
             if (newVal != val) {
+                val = newVal;
                 dep.notify()
             }          
         }
@@ -62,16 +66,20 @@ Dep.prototype = {
 
 Dep.target = null;
 
-function Watcher(key) {
+function Watcher(node,key,upFunc) {
    this.value = this.get(key);
+   this.exfun = upFunc;
+   console.log(this.exfun)
 }
 Watcher.prototype = {
     get: function (key) {
         Dep.target = this;
-        this.value = key;
+        var value = app.data[key];
+        Dep.target = null;
+        return value;
     },
     update: function () {
-        
+        this.exfun(); 
     }
 }
 
@@ -93,17 +101,17 @@ Compile.prototype = {
     },
     bind: function(node,attr){
         var eleValue = attr.value;
-        new Watcher(data[eleValue])
-        node.textContent = data[eleValue];
+        new Watcher(node,eleValue,function(){
+            node.textContent = data[eleValue];
+        })      
     }
 
 }
 
-
+let app = new Observer(data);
 new Compile(target);
 
 
 
 
 
-let app = new Observer(data);
