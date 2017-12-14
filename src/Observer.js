@@ -33,12 +33,14 @@ viewer.convert = function (key, val) {
     Object.defineProperty(data, key, {
         enumerable: true,
         configurable: true,
-        get: function () {  
+        get: function () {
+            //把订阅者收集到一个数组中；  
            Dep.target && dep.addSub(Dep.target);
            return val; 
         },
         set: function (newVal) {
             if (newVal != val) {
+                //如果值发生了改变出发订阅者的消息通知器。
                 val = newVal;
                 dep.notify()
             }          
@@ -78,14 +80,17 @@ Watcher.prototype = {
         Dep.target = null;
         return value;
     },
+    //通过绑定的回调函数，更新所绑定元素的值。
     update: function () {
         this.exfun(); 
     }
 }
 
+//从根元素开始遍历，收集元素上的所有信息。
 function Compile(el) {
   var nodes = el.childNodes;
   [].slice.call(nodes).forEach((node)=>{
+      //如果是元素
       if(node.nodeType === 1){
         this.compile(node)
       }      
@@ -94,12 +99,14 @@ function Compile(el) {
 
 Compile.prototype = {
     compile:function(node){
+        //收集元素上绑定的所有属性
        var nodeAttrs = node.attributes;
        [].slice.call(nodeAttrs).forEach((attr)=>{
             this.bind(node,attr)
        })
     },
     bind: function(node,attr){
+        //更新元素上的text,并且添加一个回调函数
         var eleValue = attr.value;
         new Watcher(node,eleValue,function(){
             node.textContent = data[eleValue];
